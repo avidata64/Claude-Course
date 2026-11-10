@@ -1,0 +1,517 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prompt Engineering for Banking</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#0b1424;overflow:hidden;font-family:Inter,Arial,sans-serif}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+.slide:not(.on){display:none!important}
+.slide table{border-collapse:collapse}.slide td,.slide th{padding:14px 18px}
+.slide ol{margin:0;padding-left:36px}
+.slide p,.slide h1,.slide h2,.slide h3{margin:0}
+[data-build-in]{transition:opacity .35s,transform .35s}
+[data-build-in].hid{opacity:0;transform:translateY(20px);pointer-events:none}
+#bar{position:fixed;right:16px;bottom:12px;color:#C3CCDB;font-size:14px;opacity:.8;z-index:9}
+#bar button{background:#1B2D4D;color:#F7F6F1;border:1px solid #3A4E70;border-radius:8px;padding:6px 12px;margin-left:6px;cursor:pointer}
+</style></head><body>
+<div id="stage"><section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#12203A;color:#F7F6F1;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:28px;font-weight:600;color:#F2B45A;letter-spacing:2px;text-transform:uppercase">AI Foundations for Banking Professionals</p>
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:112px;font-weight:700;line-height:1.05">Prompt Engineering for Banking</h1>
+<p style="font-size:40px;line-height:1.4;color:#C3CCDB">How to ask AI clearly: the core techniques, simple banking examples and the mistakes to avoid</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Before we start</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">How a chat tool works</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">1. You type</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">You write a message. This is your prompt.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">2. It is sent</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">The tool sends the whole conversation so far to the model.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">3. It writes</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">The model writes the reply one small piece (token) at a time.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#E3F0EC;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">4. You reply</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Your next message is added, and the whole conversation is sent again.</p>
+</div>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#12203A">So the model only knows what is in this conversation. That is why a clear message matters.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">What and why</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Instructions in everyday words</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Normal software</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">A programmer writes exact rules in code. If a rule is missing, the software does nothing.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#E3F0EC;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">An AI chat tool</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">You write instructions in plain words. If you leave a gap, the model fills it with a guess.</p>
+</div>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#12203A"><b>Prompt engineering</b> is getting good at writing those instructions, so the guesses are the ones you want.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Useful for relationship managers, operations, compliance and anyone who writes at work.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">The hook · Try 1</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">A vague prompt</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Bad prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Write something about our savings account.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:480px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Our savings account is a great way to grow your money. With competitive rates and flexible terms, it is designed to help you reach your financial goals. Open an account today and start building a brighter future.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Why it falls short: generic, no audience in mind, no clear next step.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">The hook · Try 2</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">The same task, asked clearly</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Better prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px">You are a retail bank marketing writer. Write a 2-sentence SMS for our new savings account (interest rate [X]%, no minimum balance). Audience: young working adults. Tone: friendly, not pushy. End with one step to open it online. No emojis.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:550px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Start saving with no minimum balance and earn [X]% interest on your new savings account. Open yours online in minutes: [link].</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Short, on-brand and ready to send once a person checks the facts.</i></p>
+</div>
+<p style="font-size:36px;line-height:1.4;font-weight:600;color:#12203A;position:absolute;left:128px;top:850px;width:1664px">The same model wrote both. The difference is how you ask.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Foundation</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">How the model ‘thinks’</h2>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:296px;width:816px;height:250px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">It predicts the next token</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">A token is a word or part of a word. It picks the next one from everything so far.</p>
+</div>
+<div data-build-in="rise 2" style="position:absolute;left:976px;top:296px;width:816px;height:250px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">It has no memory of old chats</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Unless the information is in the current conversation, it does not know it.</p>
+</div>
+<div data-build-in="rise 3" style="position:absolute;left:128px;top:576px;width:816px;height:250px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Your words steer it</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Context, detail and structure in your prompt shape what comes next.</p>
+</div>
+<div data-build-in="rise 4" style="position:absolute;left:976px;top:576px;width:816px;height:250px;display:flex;flex-direction:column;gap:12px;background:#E3F0EC;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">So: give relevant context</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">More relevant context gives more relevant and more consistent answers.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Commanding versus steering · 1</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Commanding: just tell it what to do</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Commanding prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Write an email to a customer who was charged twice.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:480px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Dear Customer, We are very sorry about the duplicate charge on your account. We understand how frustrating this is. Please be assured we are looking into it and will get back to you shortly. If you have any questions, do not hesitate to contact us. Kind regards, [Your Name]</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>The model chose the length, tone and content. No timeline, and it is long and generic.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Commanding versus steering · 2</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Steering: you choose the direction</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Steering prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px">You are a customer care officer at a retail bank. Write a short, apologetic email to a customer who was charged twice for one card payment. Say we will refund within [X] working days. Tone: professional and reassuring. Under 80 words.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:550px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Subject: Your duplicate card charge. Dear [Name], I am sorry you were charged twice for one payment. We have started an investigation, and any duplicate amount will be refunded within [X] working days. Please reply if you have questions. Kind regards, Customer Care Team</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Short, specific and reassuring, with a clear timeline.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 1 · Be specific</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">A weak prompt</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Weak prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Write a reminder about a loan payment.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:480px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Subject: Loan Payment Reminder. Dear Customer, This is a reminder that your loan payment is due soon. Please ensure that your payment is made on time to avoid any late fees or penalties. Thank you for your attention to this matter.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Too long for a text message, stiff, and a little threatening. We never said where it will be sent.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 1 · Be specific</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Add role, audience, tone and format</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Strong prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px"><b>Role:</b> You are a customer care officer at a retail bank.<br><b>Audience:</b> customers with a personal loan.<br><b>Tone:</b> polite and clear, not threatening.<br><b>Task and format:</b> write one text message under 160 characters reminding them their payment of [amount] is due on [date].</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:590px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Hi [Name], a friendly reminder: your loan instalment of [amount] is due on [date]. Please make sure funds are available. Need help? Call us anytime.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Short, friendly and ready to send.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 2 · Examples</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">No examples (zero-shot)</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Prompt with no examples</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Is this customer message a complaint, a question or praise?<br>“My card was declined and nobody called me back.”</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:500px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">This message appears to be a complaint. The customer is unhappy that their card was declined and that no one followed up with them. It would be a good idea for the bank to contact them quickly and apologise.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Right answer, but wordy. If you have 500 messages to sort, you want one word each.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 2 · Examples</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Show two to four examples (few-shot)</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Prompt with examples</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px">Label each customer message as COMPLAINT, QUESTION or PRAISE.<br>“Why was I charged a fee?” → QUESTION<br>“The app keeps crashing on me.” → COMPLAINT<br>“Thanks, the staff were very helpful!” → PRAISE<br>“My card was declined and nobody called me back.” →</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:630px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">COMPLAINT</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>One word, in the format you showed. One example is called one-shot; two to four is few-shot.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 3 · Step by step</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">A quick answer to a tricky question</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:520px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (a hurried answer can look like this)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">The ball costs 10 cents.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Check: if the ball is $0.10, the bat is $1.10 and the total is $1.20, not $1.10. The quick answer is wrong.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 3 · Step by step</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Ask it to show its working</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Better prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px">A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost? Think step by step and show your working before the final answer.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:520px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Let the ball cost x. Then the bat costs x + $1.00. Together: x + (x + $1.00) = $1.10, so 2x = $0.10 and x = $0.05. The ball costs $0.05 (5 cents) and the bat costs $1.05.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>You can check each step. Phrases to use: “Think step by step.” “Show your reasoning.”</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 4 · Ask for a format</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">No format asked: you get paragraphs</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Prompt (made-up details)</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Compare these savings accounts. A: 1.5% interest, no minimum balance, no fee. B: 2.0% interest, S$1,000 minimum, S$2 monthly fee. C: 2.5% interest, S$5,000 minimum, S$5 monthly fee.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:540px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Account A offers 1.5% interest with no minimum balance or fee, making it the simplest option. Account B offers a higher 2.0% but needs S$1,000 and charges S$2 a month. Account C pays the most at 2.5% but needs S$5,000 and charges S$5 a month.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>Correct, but hard to scan or paste into a document.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 4 · Ask for a format</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Ask for a table</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Better prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px">Compare Accounts A, B and C using only these details. Reply as a table with columns: Account, Interest, Minimum balance, Monthly fee. If a value is missing, write [CHECK]. A: 1.5%, no minimum, no fee. B: 2.0%, S$1,000 minimum, S$2 fee. C: 2.5%, S$5,000 minimum, S$5 fee.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:540px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<table style="width:1600px;font-size:24px;color:#12203A">
+<tr style="background:#12203A"><th style="width:25%;color:#F7F6F1;text-align:left">Account</th><th style="width:25%;color:#F7F6F1;text-align:left">Interest</th><th style="width:25%;color:#F7F6F1;text-align:left">Minimum balance</th><th style="width:25%;color:#F7F6F1;text-align:left">Monthly fee</th></tr>
+<tr style="background:#FFFFFF"><td>A</td><td>1.5%</td><td>None</td><td>S$0</td></tr>
+<tr style="background:#EFEEE6"><td>B</td><td>2.0%</td><td>S$1,000</td><td>S$2</td></tr>
+<tr style="background:#FFFFFF"><td>C</td><td>2.5%</td><td>S$5,000</td><td>S$5</td></tr>
+</table>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 5 · Constraints</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Say what you do not want</h2>
+<div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Length</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">“Under 100 words.” “Exactly 3 bullet points.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Tone</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">“No slang.” “Do not over-apologise.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Format</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">“One short paragraph, no bullets.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#E3F0EC;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Scope</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">“Do not promise a refund.” “Do not give reasons.”</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Limits like these are sometimes called guardrails. Next: a customer asks why a payment is on hold.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 5 · Constraints</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Without limits</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Reply to this customer: “Why is my transfer on hold?”</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:480px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">I am sorry your transfer is on hold. This usually happens when our security checks flag a payment for review, for example when the amount is large or unusual. These checks normally clear within 1 to 2 working days, and your money will then be released.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>It guessed a reason and promised a timeline. A bank may not be able to say either.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 5 · Constraints</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">With limits</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#1F7A6D">Better prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border-radius:16px">You are a customer care officer. Reply to this customer: “Why is my transfer on hold?” Write two polite, neutral sentences. Say the payment is under routine review and we will contact them. Do not give reasons. Do not promise a release time. Offer a human agent.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:560px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Thank you for contacting us. Your payment is under routine review, and we will be in touch as soon as we can. If you would like to speak to someone now, I can connect you with a member of our team.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>No guessed reasons, no promised time, and a human is offered.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 6 · Iterate</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Treat it as a conversation</h2>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px;background:#E3F0EC;padding:20px 28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">You</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Write a short message to customers about our new feature: depositing cheques by taking a photo.</p>
+</div>
+<div data-build-in="rise 1" style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:20px 28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#4A5568">Model</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Exciting news! You can now deposit cheques anytime, anywhere with just a photo. No more queues, no more waiting. Download our app today and experience banking the easy way!</p>
+</div>
+<div data-build-in="rise 2" style="display:flex;flex-direction:column;gap:4px;background:#E3F0EC;padding:20px 28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">You</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Make it 2 sentences, more factual, less salesy.</p>
+</div>
+<div data-build-in="rise 3" style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:20px 28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#4A5568">Model</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">You can now deposit cheques by taking a photo of them in our mobile app. No branch visit is needed.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 7 · Interview style</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Let the model interview you</h2>
+<p style="font-size:36px;line-height:1.4;color:#12203A">Instead of guessing what context to give, state the goal and ask the model to ask you questions first.</p>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">How to do it</h3>
+<ol style="font-size:28px;line-height:1.4;color:#4A5568">
+<li>Give the task in a sentence or two.</li>
+<li>Ask it to interview you, one question at a time.</li>
+<li>Answer each question briefly.</li>
+<li>It writes once it has enough.</li>
+</ol>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#E3F0EC;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Why and when</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">We forget audience, tone and limits because we do not know the model needs them. Its questions show the gaps.</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Use it for important or complex tasks. For a small task, one clear prompt is faster.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 7 · Example</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">The model asks, you answer</h2>
+<p style="background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;padding:28px;border-radius:16px">I need a short welcome email for new savings account customers. Before you write it, interview me: ask any questions you need, one at a time. When you have enough, say “I have enough” and write the email.</p>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p data-build-in="rise 1" style="font-size:28px;line-height:1.4;color:#12203A"><b>Model:</b> Who is the email for?</p>
+<p data-build-in="rise 2" style="font-size:28px;line-height:1.4;color:#1F7A6D"><b>You:</b> Young adults opening their first savings account.</p>
+<p data-build-in="rise 3" style="font-size:28px;line-height:1.4;color:#12203A"><b>Model:</b> What tone would you like?</p>
+<p data-build-in="rise 4" style="font-size:28px;line-height:1.4;color:#1F7A6D"><b>You:</b> Friendly and simple, with no jargon.</p>
+<p data-build-in="rise 5" style="font-size:28px;line-height:1.4;color:#12203A"><b>Model:</b> Is there anything it must include?</p>
+<p data-build-in="rise 6" style="font-size:28px;line-height:1.4;color:#1F7A6D"><b>You:</b> No minimum balance, open online, and [X]% interest.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 7 · Result</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Then it writes, with full context</h2>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:28px;line-height:1.4;color:#12203A"><b>Model:</b> I have enough. Here is the email.</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A"><b>Subject:</b> Welcome to your new savings account</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Hi [Name], welcome! Your account has no minimum balance and earns [X]% interest, so you can start saving with any amount. Log in online to set up your first deposit in minutes. We are glad you chose us.</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Warm regards, [Bank name]</p>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#12203A">Audience, tone and key points are all right the first time, with no “wrong draft, then fix” rounds.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 8 · Let it decide</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">“Do whatever you think is best”</h2>
+<p style="font-size:36px;line-height:1.4;color:#12203A">You can leave the choices to the model: the angle, the style, even the format.</p>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#E3F0EC;padding:32px;border:1px solid #1F7A6D;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Good for</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Ideas, names, first drafts, and times when you do not yet know what you want.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">Watch out</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Results vary and may not fit your need. It is hard to judge them against a target you never set.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #DDDBD2;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600">A good pattern</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Let it decide first. Pick what you like. Then steer it with specific instructions.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Technique 8 · Example</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">When you leave the choice to the model</h2>
+<p style="position:absolute;left:128px;top:292px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Open-ended prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Write something to encourage our customers to start saving. Do whatever you think is best.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:480px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Small steps, big savings. Put aside just S$5 a day and in a year you will have S$1,825. Start today, one coffee at a time.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>The model chose the angle, the style and even the figures. Nice for ideas; you would still check and rewrite before using it.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Pitfalls</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Common mistakes and fixes</h2>
+<table style="width:1664px;font-size:28px;color:#12203A">
+<tr style="background:#12203A"><th style="width:28%;color:#F7F6F1;text-align:left">Mistake</th><th style="width:32%;color:#F7F6F1;text-align:left">What goes wrong</th><th style="width:40%;color:#F7F6F1;text-align:left">Fix</th></tr>
+<tr style="background:#FFFFFF"><td><b>Too vague</b></td><td>Generic answer</td><td>Add role, audience, tone, format, length</td></tr>
+<tr style="background:#EFEEE6"><td><b>Too many tasks</b></td><td>Tasks get dropped or mixed</td><td>One task per prompt, one after another</td></tr>
+<tr style="background:#FFFFFF"><td><b>No context or examples</b></td><td>Wrong format or style</td><td>Add background and 1 to 3 examples</td></tr>
+<tr style="background:#EFEEE6"><td><b>Assuming memory</b></td><td>It forgets earlier facts</td><td>Repeat key facts in long chats</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><b>Overloaded:</b> “Summarise this complaint, list the main issues, suggest 3 follow-up questions and draft a reply.” <b>Better:</b> do each as its own step.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Banking use case · KYC</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Reading a company document</h2>
+<p style="position:absolute;left:128px;top:284px;width:1664px;font-size:28px;line-height:1.4;color:#4A5568">KYC means “know your customer”: the bank checks who a client is. Analysts often retype details from company documents.</p>
+<p style="position:absolute;left:128px;top:386px;width:1664px;font-size:28px;font-weight:600;color:#4A5568">Simple prompt (made-up document)</p>
+<p style="position:absolute;left:128px;top:434px;width:1664px;background:#EFEEE6;color:#12203A;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;padding:28px;border:1px solid #DDDBD2;border-radius:16px">Extract the details from this company document: Sunrise Example Pte Ltd. Address: 10 Example Road, Singapore. Directors: Tan Wei Ming, Lim Hui Ling. Shareholders: Tan Wei Ming (60%), Lim Hui Ling.</p>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:610px;width:1664px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #DDDBD2;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Company: Sunrise Example Pte Ltd. Address: 10 Example Road, Singapore. Directors: Tan Wei Ming, Lim Hui Ling. Shareholders: Tan Wei Ming 60%, Lim Hui Ling 40%.</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568"><i>The document never gave Lim Hui Ling’s share. The model filled the gap with a guess.</i></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#F7F6F1;color:#12203A;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D;letter-spacing:2px;text-transform:uppercase">Banking use case · KYC</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">The same document, steered</h2>
+<p style="position:absolute;left:128px;top:292px;width:860px;font-size:28px;font-weight:600;color:#1F7A6D">Better prompt</p>
+<p style="position:absolute;left:128px;top:340px;width:804px;background:#12203A;color:#F7F6F1;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;padding:28px;border-radius:16px">You are a KYC analyst. Extract company name, registration number, address, directors and shareholders (with %) into a table. Use only the text between ###. If a field is missing, write [MISSING]. Then list what we still need to ask the client.<br>### Sunrise Example Pte Ltd. Address: 10 Example Road, Singapore. Directors: Tan Wei Ming, Lim Hui Ling. Shareholders: Tan Wei Ming (60%), Lim Hui Ling. ###</p>
+<div data-build-in="rise 1" style="position:absolute;left:1020px;top:292px;width:772px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:28px;border:1px solid #1F7A6D;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#1F7A6D">Response (illustrative)</p>
+<table style="width:716px;font-size:24px;color:#12203A">
+<tr style="background:#12203A"><th style="width:38%;color:#F7F6F1;text-align:left">Field</th><th style="width:62%;color:#F7F6F1;text-align:left">Value</th></tr>
+<tr style="background:#FFFFFF"><td>Company</td><td>Sunrise Example Pte Ltd</td></tr>
+<tr style="background:#EFEEE6"><td>Registration no.</td><td>[MISSING]</td></tr>
+<tr style="background:#FFFFFF"><td>Address</td><td>10 Example Road, Singapore</td></tr>
+<tr style="background:#EFEEE6"><td>Directors</td><td>Tan Wei Ming, Lim Hui Ling</td></tr>
+<tr style="background:#FFFFFF"><td>Shareholders</td><td>Tan Wei Ming 60%, Lim Hui Ling [MISSING]</td></tr>
+</table>
+<p style="font-size:24px;line-height:1.5;color:#4A5568"><b>Still needed:</b> the registration number and Lim Hui Ling’s shareholding.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4A5568">Prompt Engineering for Banking</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;background:#12203A;color:#F7F6F1;font-family:'Inter', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:600;color:#F2B45A;letter-spacing:2px;text-transform:uppercase">Toolkit and wrap-up</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1">Take it with you</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#1B2D4D;padding:32px;border:1px solid #3A4E70;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600;color:#F2B45A">Toolkit</h3>
+<p style="font-size:28px;line-height:1.4;color:#F7F6F1">Read the official prompting guides from Anthropic and OpenAI.</p>
+<p style="font-size:28px;line-height:1.4;color:#F7F6F1">Keep a prompt journal: save what works, note what you changed.</p>
+</div>
+<div style="flex:1.3;display:flex;flex-direction:column;gap:12px;background:#1B2D4D;padding:32px;border:1px solid #3A4E70;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600;color:#F2B45A">Remember</h3>
+<p style="font-size:28px;line-height:1.4;color:#F7F6F1"><b>Be specific:</b> role, audience, tone, format.<br><b>Show examples</b> and ask for steps.<br><b>Set limits</b> and ask for a format.<br><b>Iterate</b>, or let it interview you.<br><b>Let it decide</b> only for ideas.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F2B45A;padding:32px;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:32px;font-weight:600;color:#12203A">Next step</h3>
+<p style="font-size:28px;line-height:1.4;color:#12203A">Pick one technique. Try it on a task you do every week. Save the prompt that works.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#C3CCDB">Prompt Engineering for Banking</p>
+
+</section>
+</div>
+<div id="bar"><span id="n"></span><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
+<script>
+const S=[...document.querySelectorAll('.slide')];let i=0,step=0;
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);const st=document.getElementById('stage');st.style.transform='scale('+s+')';st.style.left=(innerWidth-1920*s)/2+'px';st.style.top=(innerHeight-1080*s)/2+'px'}
+function items(){return [...S[i].querySelectorAll('[data-build-in]')]}
+function render(){S.forEach((s,k)=>s.classList.toggle('on',k===i));items().forEach(e=>{const n=+e.getAttribute('data-build-in').split(' ')[1];e.classList.toggle('hid',n>step)});document.getElementById('n').textContent=(i+1)+' / '+S.length;history.replaceState(null,'','#'+(i+1))}
+function maxStep(){return Math.max(0,...items().map(e=>+e.getAttribute('data-build-in').split(' ')[1]))}
+function go(d){if(d>0){if(step<maxStep()){step++}else if(i<S.length-1){i++;step=0}}else{if(step>0){step--}else if(i>0){i--;step=maxStep()}}render()}
+addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(1)}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1)}});
+document.getElementById('stage').addEventListener('click',()=>go(1));
+addEventListener('resize',fit);const h=parseInt(location.hash.slice(1));if(h>0&&h<=S.length)i=h-1;fit();render();
+</script></body></html>
